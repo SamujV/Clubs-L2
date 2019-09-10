@@ -1,28 +1,42 @@
 package model;
 
-public class Club {
+public class Club  {
 
 	private int id; 
-	private String nombre; 
-	private String fechaCreacion;
-	private String tipoMascota;
-	
-	
-	
-	
-	
-	
-	public void ordenarPorId() {
-		
-	}
-public void ordenarPorNombre() {
-		
-	}public void ordenarPorFechaCrea() {
-		
-	}public void ordenarPorTipoMasc() {
-		
+	private String name; 
+	private String creationDate;
+	private String petType;
+
+
+
+
+
+
+	public Club(int idd, String nam, String date, String pet) {
+		id = idd;
+		name = nam;
+		creationDate = date;
+		petType = pet;
 	}
 	
 	
 	
+	
+	public void sortById() {
+
+	}
+	public void sortByName() {
+
+	}public void sortByCreationDay() {
+
+	}public void sortByPetType() {
+
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+
+
 }
