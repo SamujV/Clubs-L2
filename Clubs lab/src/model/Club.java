@@ -1,16 +1,14 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Club  {
 
+	private ArrayList<Owner> owners = new ArrayList<Owner>();
 	private int id; 
 	private String name; 
 	private String creationDate;
 	private String petType;
-
-
-
-
-
 
 	public Club(int idd, String nam, String date, String pet) {
 		id = idd;
@@ -20,6 +18,11 @@ public class Club  {
 	}
 	
 	
+	public void addOwner(int idd, String name, String birth, String pet) {
+		
+		Owner owner = new Owner(id, name, birth, pet);
+		owners.add(owner);
+	}
 	
 	
 	public void sortById() {
@@ -37,6 +40,8 @@ public class Club  {
 		return id;
 	}
 
-
+	public String getName() {
+		return name;
+	}
 
 }
