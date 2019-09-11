@@ -25,6 +25,7 @@ public class Sistema {
 
 	}
 	public Sistema() throws IOException {
+		System.out.println(showWelcome());
 		Menu();
 
 	}
@@ -33,19 +34,17 @@ public class Sistema {
 
 
 	public void Menu() {
-		System.out.println(showWelcome());
-		System.out.println(showMenu());
 
-		int option = 0 ;
-		while(option != 4) {
+		int option = 0;
+		while(option != 5) {
 			try {
+				System.out.println(showMenu());
 				option = i.nextInt();
 				Cases(option);
-
-
-
+				
 			}catch(InputMismatchException e) {
-				e.getMessage();
+				System.out.println("Por favor digite una opcion valida");
+				i.nextLine();
 			}
 
 		}
@@ -57,7 +56,8 @@ public class Sistema {
 		message += "1. Create a Club \n";
 		message += "2. Create an Owner \n";
 		message += "3. Create a Pet \n";
-		message += "4. Exit \n";
+		message += "4. Use test data \n";
+		message += "5. Exit \n";
 		return message;
 
 	}
@@ -74,7 +74,11 @@ public class Sistema {
 			CreatePet();
 			break;
 		case 4:
-			bye();
+
+			break;
+		case 5:
+
+			bye();			
 			break;
 		default: errorNumber();
 
@@ -98,17 +102,16 @@ public class Sistema {
 		clubs.add(club);
 
 		System.out.println("\n You've been added a club successfully");
-		Menu();
 	}
 
 	public void CreateOwner() {
-		
+
 		if(clubs.size() == 0) {
 			System.out.println("You must create a club first");
 			showMenu();
 			Menu();
 		}else {
-		showCreateOwnerMessage();
+			showCreateOwnerMessage();
 			System.out.println("Select the club in wich the owner is going to be");
 			ShowClubList();
 			int c = ClubExist();

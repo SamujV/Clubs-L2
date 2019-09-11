@@ -1,7 +1,7 @@
 package model;
 
 import java.util.ArrayList;
-
+ 
 public class Club  {
 
 	private ArrayList<Owner> owners = new ArrayList<Owner>();
