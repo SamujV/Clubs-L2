@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Owner implements Serializable{
 
@@ -9,6 +10,7 @@ public class Owner implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private ArrayList<Pet> pets = new ArrayList<Pet>();
 	private int id;
 	private String name; 
 	private String birth;
@@ -20,6 +22,13 @@ public class Owner implements Serializable{
 		name = nam;
 		birth = birthh;
 		petFav = pet ;
+		
+	}
+	
+	public void addPet(int idd, String nam, String birthh, String genr, String typ) {
+		Pet pet = new Pet(idd, nam, birthh, genr, typ);
+		pets.add(pet);
+		
 	}
 	public void sortById() {
 
@@ -34,5 +43,11 @@ public class Owner implements Serializable{
 
 	}
 
+	public String getName() {
+		return name;
+	}
 
+	public ArrayList<Pet> getPets(){
+		return pets;
+	}
 }

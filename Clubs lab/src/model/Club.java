@@ -44,4 +44,7 @@ public class Club  {
 		return name;
 	}
 
+	public ArrayList<Owner> getOwners(){
+		return owners;
+	}
 }

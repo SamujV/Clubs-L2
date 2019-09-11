@@ -41,7 +41,7 @@ public class Sistema {
 				System.out.println(showMenu());
 				option = i.nextInt();
 				Cases(option);
-				
+
 			}catch(InputMismatchException e) {
 				System.out.println("Por favor digite una opcion valida");
 				i.nextLine();
@@ -74,10 +74,9 @@ public class Sistema {
 			CreatePet();
 			break;
 		case 4:
-
+			loadTestData();
 			break;
 		case 5:
-
 			bye();			
 			break;
 		default: errorNumber();
@@ -85,9 +84,10 @@ public class Sistema {
 		}
 	}
 
+
 	public void CreateClub() {
 		showCreateClubMessage();
-		System.out.println("The club needs an id, be careful you can't enter an id that has already taken");
+		System.out.println("The club needs an id, be careful you can't enter an id that is already taken");
 		int id = i.nextInt();
 		System.out.println("Enter name ");
 		String name = s.nextLine();
@@ -105,48 +105,110 @@ public class Sistema {
 	}
 
 	public void CreateOwner() {
-
+		int c = -1;
 		if(clubs.size() == 0) {
 			System.out.println("You must create a club first");
 			showMenu();
 			Menu();
 		}else {
-			showCreateOwnerMessage();
-			System.out.println("Select the club in wich the owner is going to be");
-			ShowClubList();
-			int c = ClubExist();
+			try {
+				showCreateOwnerMessage();
+				System.out.println("Select the club in wich the owner is going to be");
+				ShowClubList();
+				c = ClubExist();
 
-			System.out.println("An owner needs an id, be careful you can't enter an id that has already taken");
-			int id = i.nextInt();
-			System.out.println("Enter name ");
-			String name = s.nextLine();
-			i.nextLine();
-			System.out.println("Enter the birthday dd/mm/aa");
-			String date = i.nextLine();
-			System.out.println("Enter the favorite pet type");
-			System.out.println("" + petType());
-			String type = s.nextLine();
-			clubs.get(c).addOwner(id, name, date, type);
+				System.out.println("An owner needs an id, be careful you can't enter an id that has already taken");
+				int id = i.nextInt();
+				System.out.println("Enter name ");
+				String name = s.nextLine();
+				i.nextLine();
+				System.out.println("Enter the birthday dd/mm/aa");
+				String date = i.nextLine();
+				System.out.println("Enter the favorite pet type");
+				System.out.println("" + petType());
+				String type = s.nextLine();
+				clubs.get(c).addOwner(id, name, date, type);
+			}catch(IndexOutOfBoundsException e) {
+				System.out.println("There is no such a club");
+				CreateOwner();
+			}catch(InputMismatchException e) {
+				System.out.println("Please insert the correct format ");
 
-			System.out.println("\n You've been added an owner successfully");
-		}	
+			}
+
+		}
+
+		System.out.println("\n You've been added an owner successfully");
+
 	}
+
+
+
+	public void CreatePet() {
+		int c = -1;
+		int o = -1;
+		if(clubs.size() == 0 || clubs.get(0).getOwners().size()==0) {
+			System.out.println("You must create a club and an owner first");
+			showMenu();
+			Menu();
+		}else {
+			try {
+				showCreatePetMessage();
+				System.out.println("Select the owner's club");
+				ShowClubList();
+				c = ClubExist();
+				ShowOwnerList(clubs.get(c));
+				
+				System.out.println("Select your owner");
+				 o = i.nextInt();
+				
+				System.out.println("Insert your pet's id.");
+				int id = i.nextInt();
+				System.out.println("Enter name ");
+				String name = s.nextLine();
+				i.nextLine();
+				System.out.println("Enter the birthday dd/mm/aa");
+				String date = i.nextLine();
+				System.out.println("Enter genre");
+				String genre = s.nextLine();
+				System.out.println("Enter type");
+				petType();
+				String type = s.nextLine();
+				clubs.get(c).getOwners().get(o-1).addPet(id, name, date, genre, type);
+				
+			}catch(IndexOutOfBoundsException e) {
+				System.out.println("There is no such a club");
+				CreateOwner();
+			}catch(InputMismatchException e) {
+				System.out.println("Please insert the correct format ");
+
+			}
+
+		}
+
+		System.out.println("\n You've been added a pet successfully");
+		System.out.println("breve?  tamaño de pets " + clubs.get(c).getOwners().get(o-1).getPets().size());
+
+
+	}
+
+
 
 
 	public int ClubExist() {
 		int c = i.nextInt();
-		if(clubs.get(c-1) == null) {
+		--c;
+		if(clubs.get(c) == null) {
 			System.out.println("Upss... that club doesn't exist");
-			ClubExist();
+
 		}
-		return c-1;
+		return c;
 
 
 	}
-	public void CreatePet() {
+	private void loadTestData() {
 
 	}
-
 	public void ShowClubList() {
 
 		try {
@@ -157,6 +219,18 @@ public class Sistema {
 			e.getMessage();
 		}
 	}
+	
+	public void ShowOwnerList(Club c) {
+
+		try {
+			for (int i = 1; i <= c.getOwners().size(); i++) {
+				System.out.println(i +". "+ c.getOwners().get(i-1).getName());
+			}
+		}catch(NullPointerException e) {
+			e.getMessage();
+		}
+	}
+
 
 
 	private ArrayList<String> readData(String path)throws IOException {
