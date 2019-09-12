@@ -158,10 +158,10 @@ public class Sistema {
 				ShowClubList();
 				c = ClubExist();
 				ShowOwnerList(clubs.get(c));
-				
+
 				System.out.println("Select your owner");
-				 o = i.nextInt();
-				
+				o = i.nextInt();
+
 				System.out.println("Insert your pet's id.");
 				int id = i.nextInt();
 				System.out.println("Enter name ");
@@ -175,7 +175,7 @@ public class Sistema {
 				petType();
 				String type = s.nextLine();
 				clubs.get(c).getOwners().get(o-1).addPet(id, name, date, genre, type);
-				
+
 			}catch(IndexOutOfBoundsException e) {
 				System.out.println("There is no such a club");
 				CreateOwner();
@@ -219,7 +219,7 @@ public class Sistema {
 			e.getMessage();
 		}
 	}
-	
+
 	public void ShowOwnerList(Club c) {
 
 		try {
@@ -251,6 +251,30 @@ public class Sistema {
 		return words;
 	}
 
+	public void loadStudentsFile(String path, String sep) throws IOException {
+		File f = new File(path);
+		FileReader fr = new FileReader(f);
+		BufferedReader br = new BufferedReader(fr);
+
+		String line = br.readLine();
+		while(line != null) {
+			String[] parts = line.split(sep);
+
+			String code = parts[0];
+			int semester = Integer.parseInt(parts[1]);
+			double av = Double.parseDouble(parts[2]);
+			boolean ce = Boolean.parseBoolean(parts[3]);
+
+			Student s = new Student(code, semester, av, ce);
+			students.add(s);
+
+			line = br.readLine();
+		}
+
+		fr.close();
+
+		br.close();
+	}
 
 	public String showWelcome() {
 		String message = "";

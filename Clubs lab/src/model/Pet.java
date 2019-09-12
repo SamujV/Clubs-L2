@@ -23,7 +23,9 @@ public class Pet implements Serializable{
 		type = typ;
 	}
 	
-	
+	public int getId() {
+		return id;
+	}
 	
 	
 	
