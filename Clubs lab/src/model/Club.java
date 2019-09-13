@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class Club  {
 
 	private ArrayList<Owner> owners = new ArrayList<Owner>();
-	private int id; 
+	private String id; 
 	private String name; 
 	private String creationDate;
 	private String petType;
 
-	public Club(int idd, String nam, String date, String pet) {
+	public Club(String idd, String nam, String date, String pet) {
 		id = idd;
 		name = nam;
 		creationDate = date;
@@ -20,7 +20,7 @@ public class Club  {
 	
 	public void addOwner(int idd, String name, String birth, String pet) {
 		
-		Owner owner = new Owner(id, name, birth, pet);
+		Owner owner = new Owner(idd, name, birth, pet);
 		owners.add(owner);
 	}
 	
@@ -36,7 +36,7 @@ public class Club  {
 
 	}
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 

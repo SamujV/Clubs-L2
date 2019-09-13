@@ -50,4 +50,9 @@ public class Owner implements Serializable{
 	public ArrayList<Pet> getPets(){
 		return pets;
 	}
+	
+	
+	public int getId() {
+		return id;
+	}
 }

@@ -86,9 +86,15 @@ public class Sistema {
 
 
 	public void CreateClub() {
-		showCreateClubMessage();
 		System.out.println("The club needs an id, be careful you can't enter an id that is already taken");
-		int id = i.nextInt();
+		String id = i.nextLine();
+		boolean isId = clubIdIsUnique(id);
+		while(!isId) {
+			System.out.println("\nThis id is already taken");
+			System.out.println("Please insert another id...");
+			id = i.nextLine();
+			isId = clubIdIsUnique(id);
+		}
 		System.out.println("Enter name ");
 		String name = s.nextLine();
 		i.nextLine();
@@ -101,9 +107,24 @@ public class Sistema {
 		Club club = new Club(id, name, date, type);
 		clubs.add(club);
 
-		System.out.println("\n You've been added a club successfully");
+		System.out.println("\n" + clubAdedCorrectly());
 	}
 
+	private boolean clubIdIsUnique(String id) {
+		boolean esta = true;
+		if(clubs.size() > 0) {
+
+			for (int i = 0; i < clubs.size() && esta == true; i++) {
+
+				if(clubs.get(i).getId().equals(id)) {
+					System.out.println("You can't use this id, it is already taken");
+					esta = false;
+				}				
+			}
+		}
+		return esta;
+
+	}
 	public void CreateOwner() {
 		int c = -1;
 		if(clubs.size() == 0) {
@@ -119,6 +140,14 @@ public class Sistema {
 
 				System.out.println("An owner needs an id, be careful you can't enter an id that has already taken");
 				int id = i.nextInt();
+				boolean isId = ownerIdIsUnique(id, c);
+				while(!isId) {
+					System.out.println("\nThis id is already taken");
+					System.out.println("Please insert another id...");
+					id = i.nextInt();
+					isId = ownerIdIsUnique(id, c);
+				}
+
 				System.out.println("Enter name ");
 				String name = s.nextLine();
 				i.nextLine();
@@ -142,7 +171,21 @@ public class Sistema {
 
 	}
 
+	private boolean ownerIdIsUnique(int id, int club) {
+		boolean esta = true;
+		if(clubs.get(club).getOwners().size() > 0) {
 
+			for (int i = 0; i < clubs.get(club).getOwners().size() && esta == true; i++) {
+
+				if() {
+					System.out.println("You can use this id, it is already taken");
+					esta = false;
+				}				
+			}
+		}
+		return esta;
+
+	}
 
 	public void CreatePet() {
 		int c = -1;
@@ -162,10 +205,27 @@ public class Sistema {
 				System.out.println("Select your owner");
 				o = i.nextInt();
 
-				System.out.println("Insert your pet's id.");
-				int id = i.nextInt();
 				System.out.println("Enter name ");
 				String name = s.nextLine();
+				boolean petNExist = petNameExist(c, o, name);
+				while(!petNExist) {
+					System.out.println("\nThis id is already taken");
+					System.out.println("Please insert another id...");
+					name = i.nextLine();
+					petNExist = petNameExist(c, o, name);
+				}
+				System.out.println("Insert your pet's id.");
+				int id = i.nextInt();
+				boolean idexist = petIdIsUnique(id, c, o);
+				while(!idexist) {
+					System.out.println("\nThis id is already taken");
+					System.out.println("Please insert another id...");
+					id = i.nextInt();
+					idexist = petIdIsUnique(id, c, o);
+				}
+				
+				
+
 				i.nextLine();
 				System.out.println("Enter the birthday dd/mm/aa");
 				String date = i.nextLine();
@@ -177,7 +237,7 @@ public class Sistema {
 				clubs.get(c).getOwners().get(o-1).addPet(id, name, date, genre, type);
 
 			}catch(IndexOutOfBoundsException e) {
-				System.out.println("There is no such a club");
+				System.out.println("There is no pet with that id");
 				CreateOwner();
 			}catch(InputMismatchException e) {
 				System.out.println("Please insert the correct format ");
@@ -187,11 +247,47 @@ public class Sistema {
 		}
 
 		System.out.println("\n You've been added a pet successfully");
-		System.out.println("breve?  tamaño de pets " + clubs.get(c).getOwners().get(o-1).getPets().size());
 
 
 	}
 
+	public boolean petNameExist(int club,int owner, String name) {
+
+		boolean esta = true;
+		if(clubs.get(club).getOwners().get(owner).getPets().size() > 0 && esta) {
+
+			for (int i = 0; i < clubs.get(club).getOwners().get(owner).getPets().size() && esta == true; i++) {
+
+				if(clubs.get(club).getOwners().get(owner).getPets().get(i).getName().equalsIgnoreCase(name)) {
+					System.out.println("\n Change your pet's name");
+					esta = false;
+				}
+
+			}
+		}
+		return esta;
+
+
+
+	}
+	
+	private boolean petIdIsUnique(int id, int club, int owner) {
+		
+		boolean esta = true;
+		
+		if(clubs.get(club).getOwners().get(owner).getPets().size() > 0) {
+
+			for (int i = 0; i < clubs.get(club).getOwners().get(owner).getPets().size() && esta == true; i++) {
+
+				if(clubs.get(i).getOwners().get(owner).getPets().get(i).getId() == id) {
+					System.out.println("You can use this id, another pet has this id");
+					esta = false;
+				}				
+			}
+		}
+		return esta;
+
+	}
 
 
 
@@ -199,7 +295,9 @@ public class Sistema {
 		int c = i.nextInt();
 		--c;
 		if(clubs.get(c) == null) {
-			System.out.println("Upss... that club doesn't exist");
+			System.out.println("Upss... that club doesn't exist\n");
+			System.out.println("try one more time...");
+			ClubExist();
 
 		}
 		return c;
@@ -274,6 +372,16 @@ public class Sistema {
 		fr.close();
 
 		br.close();
+	}
+
+	public String clubAdedCorrectly() {
+		String message = "";
+		message += "=========================================================\n";
+		message += "================= CLUB ADED SUCCESFULY ==================\n";
+		message += "=========================================================\n";
+		return message;
+
+
 	}
 
 	public String showWelcome() {
