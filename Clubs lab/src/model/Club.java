@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
  
-public class Club  {
+public class Club implements Comparable{
 
 	private ArrayList<Owner> owners = new ArrayList<Owner>();
 	private String id; 
@@ -50,6 +50,13 @@ public class Club  {
 	
 	public void setOwners(ArrayList<Owner> o) {
 		owners = o;
+	}
+
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	
