@@ -18,7 +18,7 @@ public class Club  {
 	}
 	
 	
-	public void addOwner(int idd, String name, String birth, String pet) {
+	public void addOwner(String idd, String name, String birth, String pet) {
 		
 		Owner owner = new Owner(idd, name, birth, pet);
 		owners.add(owner);

@@ -11,13 +11,13 @@ public class Owner implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<Pet> pets = new ArrayList<Pet>();
-	private int id;
+	private String id;
 	private String name; 
 	private String birth;
 	private String petFav;
 
 
-	public Owner(int idd, String nam, String birthh, String pet) {
+	public Owner(String idd, String nam, String birthh, String pet) {
 		id = idd;
 		name = nam;
 		birth = birthh;
@@ -52,7 +52,7 @@ public class Owner implements Serializable{
 	}
 	
 	
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 }

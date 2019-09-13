@@ -43,7 +43,7 @@ public class Sistema {
 				Cases(option);
 
 			}catch(InputMismatchException e) {
-				System.out.println("Por favor digite una opcion valida");
+				System.out.println("Please select a valid option...");
 				i.nextLine();
 			}
 
@@ -86,19 +86,19 @@ public class Sistema {
 
 
 	public void CreateClub() {
+		showCreateClubMessage();
 		System.out.println("The club needs an id, be careful you can't enter an id that is already taken");
-		String id = i.nextLine();
+		String id = s.nextLine();
 		boolean isId = clubIdIsUnique(id);
 		while(!isId) {
-			System.out.println("\nThis id is already taken");
 			System.out.println("Please insert another id...");
-			id = i.nextLine();
+			id = s.nextLine();
 			isId = clubIdIsUnique(id);
 		}
 		System.out.println("Enter name ");
 		String name = s.nextLine();
-		i.nextLine();
 		System.out.println("Enter the creation date dd/mm/aa");
+		s.nextLine();
 		String date = i.nextLine();
 		System.out.println("Enter the pet type");
 		System.out.println("" + petType());
@@ -110,7 +110,7 @@ public class Sistema {
 		System.out.println("\n" + clubAdedCorrectly());
 	}
 
-	private boolean clubIdIsUnique(String id) {
+	private boolean clubIdIsUnique(String id) { 
 		boolean esta = true;
 		if(clubs.size() > 0) {
 
@@ -126,25 +126,25 @@ public class Sistema {
 
 	}
 	public void CreateOwner() {
+		showCreateOwnerMessage();
 		int c = -1;
 		if(clubs.size() == 0) {
-			System.out.println("You must create a club first");
+			System.out.println("\nYou must create a club first \n");
 			showMenu();
 			Menu();
 		}else {
 			try {
-				showCreateOwnerMessage();
 				System.out.println("Select the club in wich the owner is going to be");
 				ShowClubList();
 				c = ClubExist();
 
 				System.out.println("An owner needs an id, be careful you can't enter an id that has already taken");
-				int id = i.nextInt();
+				String id = s.nextLine();
 				boolean isId = ownerIdIsUnique(id, c);
 				while(!isId) {
 					System.out.println("\nThis id is already taken");
 					System.out.println("Please insert another id...");
-					id = i.nextInt();
+					id = s.nextLine();
 					isId = ownerIdIsUnique(id, c);
 				}
 
@@ -157,9 +157,9 @@ public class Sistema {
 				System.out.println("" + petType());
 				String type = s.nextLine();
 				clubs.get(c).addOwner(id, name, date, type);
+				System.out.println("\n You've been added an owner successfully");
 			}catch(IndexOutOfBoundsException e) {
 				System.out.println("There is no such a club");
-				CreateOwner();
 			}catch(InputMismatchException e) {
 				System.out.println("Please insert the correct format ");
 
@@ -167,17 +167,16 @@ public class Sistema {
 
 		}
 
-		System.out.println("\n You've been added an owner successfully");
 
 	}
 
-	private boolean ownerIdIsUnique(int id, int club) {
+	private boolean ownerIdIsUnique(String idd, int club) {
 		boolean esta = true;
 		if(clubs.get(club).getOwners().size() > 0) {
 
 			for (int i = 0; i < clubs.get(club).getOwners().size() && esta == true; i++) {
-
-				if() {
+				String idOwner = clubs.get(club).getOwners().get(i).getId(); 
+				if(idOwner.equals(idd) == true){
 					System.out.println("You can use this id, it is already taken");
 					esta = false;
 				}				
@@ -188,23 +187,24 @@ public class Sistema {
 	}
 
 	public void CreatePet() {
+		showCreatePetMessage();
 		int c = -1;
 		int o = -1;
 		if(clubs.size() == 0 || clubs.get(0).getOwners().size()==0) {
-			System.out.println("You must create a club and an owner first");
+			System.out.println("\nYou must create a club and an owner first\n");
 			showMenu();
 			Menu();
 		}else {
 			try {
-				showCreatePetMessage();
 				System.out.println("Select the owner's club");
 				ShowClubList();
 				c = ClubExist();
+				System.out.println("OWNERS.\n");
 				ShowOwnerList(clubs.get(c));
 
 				System.out.println("Select your owner");
 				o = i.nextInt();
-
+				
 				System.out.println("Enter name ");
 				String name = s.nextLine();
 				boolean petNExist = petNameExist(c, o, name);
@@ -223,8 +223,8 @@ public class Sistema {
 					id = i.nextInt();
 					idexist = petIdIsUnique(id, c, o);
 				}
-				
-				
+
+
 
 				i.nextLine();
 				System.out.println("Enter the birthday dd/mm/aa");
@@ -235,10 +235,10 @@ public class Sistema {
 				petType();
 				String type = s.nextLine();
 				clubs.get(c).getOwners().get(o-1).addPet(id, name, date, genre, type);
+				System.out.println("\n You've been added a pet successfully");
 
 			}catch(IndexOutOfBoundsException e) {
 				System.out.println("There is no pet with that id");
-				CreateOwner();
 			}catch(InputMismatchException e) {
 				System.out.println("Please insert the correct format ");
 
@@ -246,7 +246,6 @@ public class Sistema {
 
 		}
 
-		System.out.println("\n You've been added a pet successfully");
 
 
 	}
@@ -270,11 +269,11 @@ public class Sistema {
 
 
 	}
-	
+
 	private boolean petIdIsUnique(int id, int club, int owner) {
-		
+
 		boolean esta = true;
-		
+
 		if(clubs.get(club).getOwners().get(owner).getPets().size() > 0) {
 
 			for (int i = 0; i < clubs.get(club).getOwners().get(owner).getPets().size() && esta == true; i++) {
@@ -330,7 +329,7 @@ public class Sistema {
 	}
 
 
-
+/**
 	private ArrayList<String> readData(String path)throws IOException {
 		File file = new File(path);
 		FileReader fr = new FileReader(file);
@@ -347,8 +346,8 @@ public class Sistema {
 		fr.close();
 
 		return words;
-	}
-
+	}*/
+/**
 	public void loadStudentsFile(String path, String sep) throws IOException {
 		File f = new File(path);
 		FileReader fr = new FileReader(f);
@@ -373,7 +372,7 @@ public class Sistema {
 
 		br.close();
 	}
-
+*/
 	public String clubAdedCorrectly() {
 		String message = "";
 		message += "=========================================================\n";
