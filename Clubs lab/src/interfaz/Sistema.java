@@ -17,6 +17,8 @@ public class Sistema {
 	Scanner s = new Scanner(System.in);
 
 	public static final String CLUBS_DATA = "data/clubs.txt";
+	public static final String OWNERS_DATA = "data/owners.txt";
+	public static final String PETS_DATA = "data/pets.txt";
 	private ArrayList<Club> clubs = new ArrayList<Club>();
 
 	public static void main(String[] args) throws IOException {
@@ -33,7 +35,7 @@ public class Sistema {
 
 
 
-	public void Menu() {
+	public void Menu() throws IOException {
 
 		int option = 0;
 		while(option != 5) {
@@ -62,7 +64,7 @@ public class Sistema {
 
 	}
 
-	public void Cases(int option) {
+	public void Cases(int option) throws IOException {
 		switch (option){
 		case 1:
 			CreateClub();
@@ -125,7 +127,7 @@ public class Sistema {
 		return esta;
 
 	}
-	public void CreateOwner() {
+	public void CreateOwner() throws IOException {
 		showCreateOwnerMessage();
 		int c = -1;
 		if(clubs.size() == 0) {
@@ -186,17 +188,17 @@ public class Sistema {
 
 	}
 
-	public void CreatePet() {
+	public void CreatePet() throws IOException {
 		showCreatePetMessage();
-		int c = -1;
-		int o = -1;
+		int c = 0;
+		int o = 0;
 		if(clubs.size() == 0 || clubs.get(0).getOwners().size()==0) {
 			System.out.println("\nYou must create a club and an owner first\n");
 			showMenu();
 			Menu();
 		}else {
 			try {
-				System.out.println("Select the owner's club");
+				System.out.println("Select owner's club");
 				ShowClubList();
 				c = ClubExist();
 				System.out.println("OWNERS.\n");
@@ -204,18 +206,22 @@ public class Sistema {
 
 				System.out.println("Select your owner");
 				o = i.nextInt();
-				
+				--o;
+
 				System.out.println("Enter name ");
 				String name = s.nextLine();
 				boolean petNExist = petNameExist(c, o, name);
 				while(!petNExist) {
-					System.out.println("\nThis id is already taken");
-					System.out.println("Please insert another id...");
-					name = i.nextLine();
+					System.out.println("\nThis name is already taken");
+					System.out.println("Please insert another name...");
+					name = s.nextLine();
 					petNExist = petNameExist(c, o, name);
 				}
 				System.out.println("Insert your pet's id.");
+				i.nextLine();
+				s.nextLine();
 				int id = i.nextInt();
+
 				boolean idexist = petIdIsUnique(id, c, o);
 				while(!idexist) {
 					System.out.println("\nThis id is already taken");
@@ -234,14 +240,14 @@ public class Sistema {
 				System.out.println("Enter type");
 				petType();
 				String type = s.nextLine();
-				clubs.get(c).getOwners().get(o-1).addPet(id, name, date, genre, type);
+				clubs.get(c).getOwners().get(o).addPet(id, name, date, genre, type);
 				System.out.println("\n You've been added a pet successfully");
 
-			}catch(IndexOutOfBoundsException e) {
-				System.out.println("There is no pet with that id");
 			}catch(InputMismatchException e) {
 				System.out.println("Please insert the correct format ");
 
+			}catch(IndexOutOfBoundsException e) {
+				System.out.println("There is no pet with that id");
 			}
 
 		}
@@ -255,10 +261,9 @@ public class Sistema {
 		boolean esta = true;
 		if(clubs.get(club).getOwners().get(owner).getPets().size() > 0 && esta) {
 
-			for (int i = 0; i < clubs.get(club).getOwners().get(owner).getPets().size() && esta == true; i++) {
+			for (int i = 0; i < clubs.get(club).getOwners().get(owner).getPets().size() && esta; i++) {
 
 				if(clubs.get(club).getOwners().get(owner).getPets().get(i).getName().equalsIgnoreCase(name)) {
-					System.out.println("\n Change your pet's name");
 					esta = false;
 				}
 
@@ -276,10 +281,9 @@ public class Sistema {
 
 		if(clubs.get(club).getOwners().get(owner).getPets().size() > 0) {
 
-			for (int i = 0; i < clubs.get(club).getOwners().get(owner).getPets().size() && esta == true; i++) {
+			for (int i = 0; i < clubs.get(club).getOwners().get(owner).getPets().size() && esta ; i++) {
 
 				if(clubs.get(i).getOwners().get(owner).getPets().get(i).getId() == id) {
-					System.out.println("You can use this id, another pet has this id");
 					esta = false;
 				}				
 			}
@@ -303,9 +307,7 @@ public class Sistema {
 
 
 	}
-	private void loadTestData() {
-
-	}
+	
 	public void ShowClubList() {
 
 		try {
@@ -329,41 +331,71 @@ public class Sistema {
 	}
 
 
-/**
-	private ArrayList<String> readData(String path)throws IOException {
-		File file = new File(path);
-		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
 
-		ArrayList<String> words = new ArrayList<String>();
 
-		String line = br.readLine();
-		while(line != null){
-			words.add(line);
-			line = br.readLine();
-		}
-		br.close();
-		fr.close();
+	private void loadTestData() throws IOException {
 
-		return words;
-	}*/
-/**
-	public void loadStudentsFile(String path, String sep) throws IOException {
+		loadClubsFile(CLUBS_DATA);
+
+
+	}
+	public void loadClubsFile(String path) throws IOException {
+		
+		
 		File f = new File(path);
 		FileReader fr = new FileReader(f);
 		BufferedReader br = new BufferedReader(fr);
 
 		String line = br.readLine();
 		while(line != null) {
-			String[] parts = line.split(sep);
+			String[] parts = line.split(",");
 
-			String code = parts[0];
-			int semester = Integer.parseInt(parts[1]);
-			double av = Double.parseDouble(parts[2]);
-			boolean ce = Boolean.parseBoolean(parts[3]);
+			String id = parts[0];
+			String name = parts[1];
+			String date = parts[2];
+			String pet = parts[3];
 
-			Student s = new Student(code, semester, av, ce);
-			students.add(s);
+			Club c = new Club(id, name, date, pet);
+			loadOwnersFile(c, OWNERS_DATA);
+			clubs.add(c);
+		
+			line = br.readLine();
+		}
+
+		fr.close();
+
+		br.close();
+	}
+
+	public void loadOwnersFile(Club c, String path) throws IOException {
+		ArrayList<String[]> p = loadPetsFile(PETS_DATA);
+		File f = new File(path);
+		FileReader fr = new FileReader(f);
+		BufferedReader br = new BufferedReader(fr);
+		String line = br.readLine();
+	
+		while(line != null) {
+			String[] parts = line.split(",");
+			
+			String id = parts[0];
+			String name = parts[1];
+			String date = parts[2];
+			String pet = parts[3];
+
+			 c.addOwner(id, name, date, pet);
+			 int amountPets = (int) Math.random()*100000;
+			 for (int i = 0; i < amountPets ; i++) {
+				 	String[] partsP = p.get(i);
+					int idP = Integer.parseInt(partsP[0]);
+					String nameP = partsP[1];
+					String birthP = partsP[2];
+					String genreP = partsP[3];
+					String typeP = partsP[4];
+
+				
+				 c.getOwners().get(c.getOwners().size()-1).addPet(idP, nameP, birthP, genreP, typeP);
+				 
+			}
 
 			line = br.readLine();
 		}
@@ -372,7 +404,31 @@ public class Sistema {
 
 		br.close();
 	}
-*/
+
+	public ArrayList<String[]> loadPetsFile(String path) throws IOException {
+		File f = new File(path);
+		FileReader fr = new FileReader(f);
+		BufferedReader br = new BufferedReader(fr);
+
+		ArrayList<String[]> pets = new ArrayList<String[]>();
+		String line = br.readLine();
+		while(line != null) {
+			String[] parts = line.split(",");
+			pets.add(parts);
+
+
+			line = br.readLine();
+		}
+
+		fr.close();
+
+		br.close();
+		return pets;
+	}
+
+
+
+
 	public String clubAdedCorrectly() {
 		String message = "";
 		message += "=========================================================\n";

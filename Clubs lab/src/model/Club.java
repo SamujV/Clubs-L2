@@ -47,4 +47,10 @@ public class Club  {
 	public ArrayList<Owner> getOwners(){
 		return owners;
 	}
+	
+	public void setOwners(ArrayList<Owner> o) {
+		owners = o;
+	}
+	
+	
 }
